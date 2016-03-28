@@ -44,7 +44,16 @@ if($projectid != '') {
 		echo '</div></div></div></div>';
 	}
 	
+	$projectmilestoneblock = 'ProjectMilestone';
+	$params = array('id' => "$projectid", 'block'=>"$projectmilestoneblock",'contactid'=>$customerid,'sessionid'=>"$sessionid");
+	$result = $Custom_client->call('get_project_components', $params, $Custom_Server_Path, $Custom_Server_Path);	
+	echo '<div class="widget-box"><div class="widget-header"><h5 class="widget-title">'.getTranslatedString('LBL_PROJECT_MILESTONES').'</h5></div>';
+	echo '<div class = "widget-body"><div class="widget-main no-padding single-entity-view">
+			<div style="width:auto;padding:12px;display:block;" id="tblLeadInformation">';
+	echo getblock_fieldlistview($result,"$projectmilestoneblock");	
+	echo '</table></td></tr>';
 	
+	echo '<tr><td colspan="4">&nbsp;</div></div></div></div>';
 	
 	$projecttaskblock = 'ProjectTask';
 	$params = array('id' => "$projectid", 'block'=>"$projecttaskblock",'contactid'=>$customerid,'sessionid'=>"$sessionid");
@@ -53,17 +62,6 @@ if($projectid != '') {
 	echo '<div class = "widget-body"><div class="widget-main no-padding single-entity-view">
 			<div style="width:auto;padding:12px;display:block;" id="tblLeadInformation">';
 	echo getblock_fieldlistview($result,"$projecttaskblock");	
-	echo '</table></td></tr>';
-	
-	echo '<tr><td colspan="4">&nbsp;</div></div></div></div>';
-	
-	$projectmilestoneblock = 'ProjectMilestone';
-	$params = array('id' => "$projectid", 'block'=>"$projectmilestoneblock",'contactid'=>$customerid,'sessionid'=>"$sessionid");
-	$result = $Custom_client->call('get_project_components', $params, $Custom_Server_Path, $Custom_Server_Path);	
-	echo '<div class="widget-box"><div class="widget-header"><h5 class="widget-title">'.getTranslatedString('LBL_PROJECT_MILESTONES').'</h5></div>';
-	echo '<div class = "widget-body"><div class="widget-main no-padding single-entity-view">
-			<div style="width:auto;padding:12px;display:block;" id="tblLeadInformation">';
-	echo getblock_fieldlistview($result,"$projectmilestoneblock");	
 	echo '</table></td></tr>';
 	
 	echo '<tr><td colspan="4">&nbsp;</div></div></div></div>';
