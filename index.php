@@ -36,6 +36,7 @@ include("version.php");
 if($_REQUEST['param'] == 'forgot_password')
 {
 	global $client;
+	global $Custom_client;
 
 	$email = $_REQUEST['email_id'];
 	$params = array('email' => "$email");
@@ -112,6 +113,18 @@ else
 				$block = $_REQUEST['module'];
 				$params = array('id' => "$id", 'folderid'=> "$folderid",'block'=>"$block", 'contactid'=>"$customerid",'sessionid'=>"$sessionid");
 				$result = $client->call('get_filecontent_detail', $params, $Server_Path, $Server_Path);
+				$fileType=$result[0]['filetype'];
+				$filesize=$result[0]['filesize'];
+				$filename=html_entity_decode($result[0]['filename']);
+				$fileContent=$result[0]['filecontents'];
+			}
+			else if(($_REQUEST['module'] == 'Project') or ($_REQUEST['module'] == "ProjectTask"))
+			{
+				$id = $_REQUEST['id'];
+				$block = $_REQUEST['module'];
+				$fileid = $_REQUEST['fileid'];
+				$params = array('id' => "$id", 'fileid' => "$fileid", 'block' => "$block", 'contactid' => "$customerid", 'sessionid' => "$sessionid");
+				$result = $Custom_client->call('get_filecontent_project', $params, $Custom_Server_Path, $Custom_Server_Path);
 				$fileType=$result[0]['filetype'];
 				$filesize=$result[0]['filesize'];
 				$filename=html_entity_decode($result[0]['filename']);

@@ -569,7 +569,7 @@ function getblock_fieldAttachments($block, $Custom_client = '', $Custom_Server_P
 											'.$attachments_title.
 										'</label>
 										<div class="col-sm-9 dvtCellInfo" align="left" valign="top">
-											<a href="index.php?downloadfile=true&fileid='.$fileid.'&filename='.$filename.'&filetype='.$filetype.'&filesize='.$filesize.'&id='.$Id.'">'.ltrim($filename,$Id.'_').'</a>
+											<a href="index.php?downloadfile=true&module='.$block.'&fileid='.$fileid.'&filename='.$filename.'&filetype='.$filetype.'&filesize='.$filesize.'&id='.$Id.'">'.ltrim($filename,$Id.'_').'</a>
 										</div>
 									</div>';
 							

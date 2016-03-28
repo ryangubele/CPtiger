@@ -305,6 +305,12 @@ $server->register(
 	$NAMESPACE);
 
 $server->register(
+	'get_filecontent_project',
+	array('id'=>'xsd:string','fileid'=>'xsd:string','block'=>'xsd:string','contactid'=>'xsd:string','sessionid'=>'xsd:string'),
+	array('return'=>'tns:get_ticket_attachments_array'),
+	$NAMESPACE);
+
+$server->register(
 	'get_invoice_detail',
 	array('id'=>'xsd:string','block'=>'xsd:string','contactid'=>'xsd:string','sessionid'=>'xsd:string'),
 	array('return'=>'tns:field_details_array'),
@@ -2106,6 +2112,50 @@ function get_filecontent_detail($id,$folderid,$module,$customerid,$sessionid)
 	return $output;
 }
 
+/**	function used to get the contents of a project, project milestone, or project task attachment
+ *	@param int id, int fileid
+ *	return $fileconents array
+ */
+function get_filecontent_project($id, $fileid, $module, $customerid, $sessionid)
+{
+	global $adb,$log;
+	global $site_URL;
+	$log->debug("Entering customer portal function get_filecontent_project ");
+	$isPermitted = check_permission($customerid,$module,$id);
+	if($isPermitted == false) {
+		return array("#NOT AUTHORIZED#");
+	}
+
+	if(!validateSession($customerid,$sessionid))
+	return null;
+
+	$query ='select vtiger_senotesrel.crmid, vtiger_attachments.*,vtiger_notes.filename,vtiger_notes.filelocationtype, vtiger_notes.filesize
+	from vtiger_senotesrel
+	left join vtiger_notes on vtiger_notes.notesid=vtiger_senotesrel.notesid
+	inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_notes.notesid
+	left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_notes.notesid
+	left join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid
+	where vtiger_crmentity.deleted = 0 and vtiger_attachments.attachmentsid = ? and vtiger_senotesrel.crmid = ?';
+
+	$res = $adb->pquery($query, array($fileid, $id));
+
+	$filename = $adb->query_result($res,0,'name');
+	$filename = decode_html($filename);
+	$filepath = $adb->query_result($res,0,'path');
+	$fileid = $adb->query_result($res,0,'attachmentsid');
+	$filesize = filesize($filepath.$fileid."_".$filename);
+	$filetype = $adb->query_result($res,0,'type');
+	$filenamewithpath=$filepath.$fileid.'_'.$filename;
+
+	$output[0]['fileid'] = $fileid;
+	$output[0]['filename'] = $filename;
+	$output[0]['filetype'] = $filetype;
+	$output[0]['filesize'] = $filesize;
+	$output[0]['filecontents']=base64_encode(file_get_contents($filenamewithpath));
+	$log->debug("Exiting customer portal function get_filecontent_project ");
+
+	return $output;
+}
 /** Function that the client actually calls when a file is downloaded
  *
  */
