@@ -1389,7 +1389,7 @@ function get_attachments($input_array)
 			inner join vtiger_crmentity on vtiger_crmentity.crmid=vtiger_notes.notesid 
 			left join vtiger_seattachmentsrel on vtiger_seattachmentsrel.crmid=vtiger_notes.notesid 
 			left join vtiger_attachments on vtiger_attachments.attachmentsid = vtiger_seattachmentsrel.attachmentsid 
-			and vtiger_crmentity.deleted = 0 where vtiger_senotesrel.crmid = ?";
+			where vtiger_crmentity.deleted = 0 and vtiger_senotesrel.crmid = ?";
 
 	$res = $adb->pquery($query, array($blockid));
 	$noofrows = $adb->num_rows($res);
