@@ -2594,16 +2594,14 @@ function get_details($id,$module,$customerid,$sessionid)
 					FROM vtiger_projectmilestone
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projectmilestone.projectmilestoneid
 					LEFT JOIN vtiger_projectmilestonecf ON vtiger_projectmilestonecf.projectmilestoneid = vtiger_projectmilestone.projectmilestoneid
-					WHERE vtiger_projectmilestone.projectmilestoneid = ? AND vtiger_crmentity.deleted =0
-					ORDER BY projectmilestonedate";
+					WHERE vtiger_projectmilestone.projectmilestoneid = ? AND vtiger_crmentity.deleted =0";
 	}
 	else if ($module == 'ProjectTask') {
 		$query = "SELECT vtiger_projecttask.*, vtiger_projecttaskcf.*, vtiger_crmentity.*
 					FROM vtiger_projecttask
 					INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projecttask.projecttaskid
 					LEFT JOIN vtiger_projecttaskcf ON vtiger_projecttaskcf.projecttaskid = vtiger_projecttask.projecttaskid
-					WHERE vtiger_projecttask.projecttaskid = ? AND vtiger_crmentity.deleted = 0
-					ORDER BY enddate";
+					WHERE vtiger_projecttask.projecttaskid = ? AND vtiger_crmentity.deleted = 0";
 	} 
 	
 
